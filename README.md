@@ -1,7 +1,7 @@
 # 🎨 DomCol
 
 DomCol is a command-line utility that extracts **dominant colors** from an image file.  
-It iss written in **Go** and powered by [spf13/cobra](https://github.com/spf13/cobra) for its CLI interface.
+It is written in **Go** and powered by [spf13/cobra](https://github.com/spf13/cobra) for its CLI interface.
 
 ![Go Badge](https://img.shields.io/badge/made%20with-Go-00ADD8?logo=go&logoColor=white)
 ![CLI Badge](https://img.shields.io/badge/cli-cobra-blue?logo=terminal&logoColor=white)
