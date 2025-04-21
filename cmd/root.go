@@ -18,24 +18,22 @@ var (
 	topN     int
 )
 
-
 var rootCmd = &cobra.Command{
-	Use: "domcol",
+	Use:   "domcol",
 	Short: "DomCol is a CLI tool that helps you find the dominant colors in an image file.",
 	Run: func(cmd *cobra.Command, args []string) {
 		runDomCol()
 	},
 }
 
-
-func Execute(){
+func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 }
 
-func init(){
+func init() {
 	rootCmd.PersistentFlags().StringVarP(&imgPath, "imgpath", "i", "", "Path to the image file (required)")
 	rootCmd.PersistentFlags().BoolVar(&wantsRgb, "rgba", false, "Returns the dominant colors in RGB form")
 	rootCmd.PersistentFlags().BoolVar(&wantsHex, "hex", false, "Returns the dominant colors in hex form")
@@ -98,7 +96,7 @@ func runDomCol() {
 			if i >= topN {
 				break
 			}
-			fmt.Println(convToEightBitRGB(cf.Color), cf.Count)
+			printColorSwatchWithLabel(cf.Color, cf.Count, "rgb")
 		}
 	}
 
@@ -107,12 +105,12 @@ func runDomCol() {
 			if i >= topN {
 				break
 			}
-			fmt.Println(convToHexRGB(cf.Color), cf.Count)
+			printColorSwatchWithLabel(cf.Color, cf.Count, "hex")
 		}
 	}
 
 }
-
+/* Deprecated at this point */
 func convToEightBitRGB(color [3]uint32) string {
 	r := color[0] * 255 / 65535
 	g := color[1] * 255 / 65535
@@ -127,4 +125,22 @@ func convToHexRGB(color [3]uint32) string {
 	b := color[2] * 255 / 65535
 
 	return fmt.Sprintf("#%02X%02X%02X", r, g, b)
+}
+
+func printColorSwatchWithLabel(color [3]uint32, count int, format string) {
+	r := int(color[0] * 255 / 65535)
+	g := int(color[1] * 255 / 65535)
+	b := int(color[2] * 255 / 65535)
+
+	label := ""
+	if format == "rgb" {
+		label = fmt.Sprintf("rgb(%d, %d, %d)", r, g, b)
+	} else if format == "hex" {
+		label = fmt.Sprintf("#%02X%02X%02X", r, g, b)
+	}
+
+	fmt.Printf("\033[48;2;%d;%d;%dm", r, g, b)
+	fmt.Print("      ")
+	fmt.Print("\033[0m ")
+	fmt.Printf("%s (%d)\n", label, count)
 }
